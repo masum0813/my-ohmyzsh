@@ -25,6 +25,16 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
+      - name: Install python & ansible
+        run: |      
+          apt-get update -y && apt-get install -y python3.8-venv python3-pip jq unzip
+          pip3 -q install ansible==2.10.7
+
+      - name: Install virtualbox & vagrant
+        run: |      
+          apt-get update -y && apt-get install -y virtualbox vagrant
+          pip3 -q install ansible==2.10.7
+
       - name: Cache Vagrant boxes
         uses: actions/cache@v2
         with:
@@ -32,7 +42,7 @@ jobs:
           key: ${{ runner.os }}-vagrant-${{ hashFiles('Vagrantfile') }}
           restore-keys: |
             ${{ runner.os }}-vagrant-
-              
+
       - name: Show Vagrant version
         run: vagrant --version
 
@@ -54,8 +64,7 @@ jobs:
       #     # the commands to run in vm
       #     run: vagrant init && vagrant up --provision-with all
       # Runs a single command using the runners shell
-      # - name: Run a one-line script
-      #   run: sh ./provision/install-all.sh
+
 
       # - name: Ansible CLI
       #   # You may pin to the exact commit or the version.
