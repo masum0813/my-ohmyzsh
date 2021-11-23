@@ -36,7 +36,7 @@ jobs:
         uses: tomasnorre/ansible-cli-client@0.0.2
         with:
           # Command to execute
-          command: ansible-playbook --connection=ssh --timeout=30 ../../playbooks/provision-all.yml # default is ansible-playbook
+          command: ansible-playbook --connection=ssh --timeout=30 ./playbooks/provision-all.yml # default is ansible-playbook
     
       # Runs a single command using the runners shell
       - name: Run a one-line script
