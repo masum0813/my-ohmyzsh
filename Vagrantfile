@@ -16,15 +16,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.synced_folder ".", "/vagrant", disabled: true
     config.vm.synced_folder "./", "/vagrant", privileged: true
 
-    config.hostmanager.enabled = true
-    config.hostmanager.manage_host = true
-
     boxes = [
         { :name => "myzsh",  :ip => CTRL_00_IP,  :cpus => 1,  :memory => 1024 }
     ]
 
-  config.hostmanager.enabled = true
-  config.hostmanager.manage_host = true
+  # config.hostmanager.enabled = true
+  # config.hostmanager.manage_host = true
 
   boxes.each do |opts|
     config.vm.define opts[:name] do |box|
