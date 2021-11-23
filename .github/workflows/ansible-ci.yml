@@ -16,7 +16,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
+  vagrant-up:
     # The type of runner that the job will run on
     runs-on: ubuntu-20.04
 
@@ -25,17 +25,34 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
+      - name: Cache Vagrant boxes
+        uses: actions/cache@v2
+        with:
+          path: ~/.vagrant.d/boxes
+          key: ${{ runner.os }}-vagrant-${{ hashFiles('Vagrantfile') }}
+          restore-keys: |
+            ${{ runner.os }}-vagrant-
+              
+      - name: Show Vagrant version
+        run: vagrant --version
+
+      - name: Run vagrant up
+        run: vagrant up
+
+      - name: ssh into box after boot
+        run: vagrant ssh -c "echo 'hello world!'"
+
       # - name: ansible-lint
       #   # You may pin to the exact commit or the version.
       #   # uses: ansible/ansible-lint-action@f8608f547bbe585e82634c54859e170c39384aa4
       #   uses: ansible/ansible-lint-action@v4.1.0
-      - name: Vagrant-VirtualBox-with-repos-Vagrantfile
-        # You may pin to the exact commit or the version.
-        # uses: kentahikaru/github-action-vagrant--vagrantfile-from-repository@3f86c3ef7e6e7b639dc0a4aed330337d1c653793
-        uses: kentahikaru/github-action-vagrant--vagrantfile-from-repository@v1
-        with:
-          # the commands to run in vm
-          run: vagrant init && vagrant up --provision-with all
+      # - name: Vagrant-VirtualBox-with-repos-Vagrantfile
+      #   # You may pin to the exact commit or the version.
+      #   # uses: kentahikaru/github-action-vagrant--vagrantfile-from-repository@3f86c3ef7e6e7b639dc0a4aed330337d1c653793
+      #   uses: kentahikaru/github-action-vagrant--vagrantfile-from-repository@v1
+      #   with:
+      #     # the commands to run in vm
+      #     run: vagrant init && vagrant up --provision-with all
       # Runs a single command using the runners shell
       # - name: Run a one-line script
       #   run: sh ./provision/install-all.sh
