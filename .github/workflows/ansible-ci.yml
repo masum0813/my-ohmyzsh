@@ -27,12 +27,12 @@ jobs:
 
       - name: Install python & ansible
         run: |      
-          apt-get update -y && apt-get install -y python3.8-venv python3-pip jq unzip
+          sudo apt-get update -y && sudo apt-get install -y python3.8-venv python3-pip jq unzip
           pip3 -q install ansible==2.10.7
 
       - name: Install virtualbox & vagrant
         run: |      
-          apt-get update -y && apt-get install -y virtualbox vagrant
+          sudo apt-get update -y && sudo apt-get install -y virtualbox vagrant
           pip3 -q install ansible==2.10.7
 
       - name: Cache Vagrant boxes
