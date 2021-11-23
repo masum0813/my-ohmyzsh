@@ -1,0 +1,11 @@
+---
+- hosts: myzsh
+  become: yes
+  gather_facts: no
+
+  vars_files:
+    - /vagrant/vars/main.yml
+
+  roles:
+    - oh-myzsh
+    - other-tools

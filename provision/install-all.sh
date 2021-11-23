@@ -1,6 +1,9 @@
 #!/bin/bash -e
 export VagrantWD=/vagrant
 
+source ${VagrantWD}/provision/common-setup.sh
 
-eval ${VagrantWD}/provision/install-zsh.sh
-eval ${VagrantWD}/provision/install-other-tools.sh
+ansible-playbook \
+--connection=ssh \
+--timeout=30 \
+${VagrantWD}/playbooks/provision-all.yml
