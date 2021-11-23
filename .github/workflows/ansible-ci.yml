@@ -25,10 +25,10 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      - name: ansible-lint
-        # You may pin to the exact commit or the version.
-        # uses: ansible/ansible-lint-action@f8608f547bbe585e82634c54859e170c39384aa4
-        uses: ansible/ansible-lint-action@v4.1.0
+      # - name: ansible-lint
+      #   # You may pin to the exact commit or the version.
+      #   # uses: ansible/ansible-lint-action@f8608f547bbe585e82634c54859e170c39384aa4
+      #   uses: ansible/ansible-lint-action@v4.1.0
 
       - name: Ansible CLI
         # You may pin to the exact commit or the version.
