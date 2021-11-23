@@ -1,0 +1,7 @@
+---
+- hosts: myzsh
+  gather_facts: no
+  vars_files:
+    - /vagrant/vars/main.yml
+  roles:
+    - other-tools

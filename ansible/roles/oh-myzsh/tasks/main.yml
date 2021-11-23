@@ -1,0 +1,94 @@
+---
+- name: install dependencies
+  package:
+    name:
+      - git
+      - zsh
+      - fonts-powerline
+    state: present
+  tags: dependencies
+
+
+- name: Check if .oh-my-zsh exists
+  stat:
+    path: "{{ ansible_env_home }}/.oh-my-zsh"
+  register: stat_oh_my_zsh_result
+  tags: oh-my-zsh
+
+- name: Cloning  oh-my-zsh
+  ansible.builtin.git :
+    repo: https://github.com/robbyrussell/oh-my-zsh
+    dest: "{{ ansible_env_home }}/.oh-my-zsh"
+    force: yes
+  when: not stat_oh_my_zsh_result.stat.exists
+  tags: oh-my-zsh
+
+- name: Clone oh-my-zsh custom plugins
+  git:
+    repo: "{{ item.repo }}"
+    dest: "{{ ansible_env_home }}/.oh-my-zsh/custom/plugins/{{ item.name }}"
+    accept_hostkey: yes
+    update: yes
+  with_items: "{{ zsh_ohmy_custom_plugins }}"
+  tags: oh-my-zsh
+
+- name: Clone oh-my-zsh custom themes
+  git:
+    repo: "{{ item.repo }}"
+    dest: "{{ ansible_env_home }}/.oh-my-zsh/custom/themes/{{ item.name }}"
+    accept_hostkey: yes
+    update: yes
+  with_items: "{{ zsh_ohmy_custom_themes }}"
+  tags: oh-my-zsh
+
+
+- name: Get zsh path
+  command: which zsh
+  register: zsh_path
+  changed_when: no
+  tags: zsh
+
+- name: Switch to zsh
+  become: yes
+  user:
+    name: "{{ ansible_ssh_user }}"
+    shell: "{{ zsh_path.stdout }}"
+  tags: zsh
+
+
+- name: write .p10k.zsh for users
+  template:
+    src: .p10k.j2
+    dest: '{{ ansible_env_home }}/.p10k.zsh'
+    backup: yes
+    mode: '744'
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+  tags: oh-my-zsh
+
+
+- name: write .zshrc for users
+  template:
+    src: .zshrc.j2
+    dest: '{{ ansible_env_home }}/.zshrc'
+    backup: yes
+    mode: '744'
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+  tags: oh-my-zsh
+
+
+
+# - name: Reload .zshrc
+#   command: ". {{ ansible_env_home }}/.zshrc"
+#   changed_when: no
+#   tags: zsh
+
+- name: recursively update .oh-my-zsh folder
+  ansible.builtin.file:
+    path: "{{ ansible_env_home }}/.oh-my-zsh"
+    state: directory
+    recurse: yes
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+  tags: oh-my-zsh

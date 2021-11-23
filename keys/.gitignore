@@ -1,0 +1,4 @@
+*id_rsa*
+*_id_rsa*
+!vagrant_id_rsa
+!vagrant_id_rsa.pub

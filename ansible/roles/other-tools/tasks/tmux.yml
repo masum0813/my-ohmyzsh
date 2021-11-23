@@ -1,0 +1,34 @@
+---
+- name: Check if tmux-plugins/tpm exists
+  stat:
+    path: "{{ ansible_env_home }}/.tmux/plugins/tpm"
+  register: tmux_plugins_tpm
+  tags: tmux
+
+- name: Cloning  https://github.com/tmux-plugins/tpm
+  ansible.builtin.git :
+    repo: https://github.com/tmux-plugins/tpm
+    dest: "{{ ansible_env_home }}/.tmux/plugins/tpm"
+    force: yes
+  when: not tmux_plugins_tpm.stat.exists
+  tags: tmux
+
+- name: write .tmux.conf for users
+  template:
+    src: .tmux.conf.j2
+    dest: '{{ ansible_env_home }}/.tmux.conf'
+    backup: yes
+    mode: '744'
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+  tags: tmux
+
+- name: recursively update .tmux folder
+  ansible.builtin.file:
+    path: "{{ ansible_env_home }}/.tmux"
+    state: directory
+    recurse: yes
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+  tags: tmux
+

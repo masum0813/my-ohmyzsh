@@ -1,0 +1,128 @@
+---
+- name: Check if .vim exists
+  stat:
+    path: "{{ ansible_env_home }}/.vim"
+  register: vim
+  tags: vim
+
+- name: Create .vim if it does not exist
+  ansible.builtin.file:
+    path: "{{ ansible_env_home }}/.vim"
+    state: directory
+    recurse: yes
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+  when: not vim.stat.exists
+
+- name: recursively update user rights .vim folder
+  ansible.builtin.file:
+    path: "{{ ansible_env_home }}/.vim/"
+    state: directory
+    mode: '744'
+    recurse: yes
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+  tags: vim
+  become: yes
+
+- name: Check if .vim/bundle exists
+  stat:
+    path: "{{ ansible_env_home }}/.vim/bundle"
+  register: vim_bundle
+  tags: vim
+
+- name: Create .vim/bundle if it does not exist
+  ansible.builtin.file:
+    path: "{{ ansible_env_home }}/.vim/bundle"
+    state: directory
+    mode: '744'
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+  when: not vim_bundle.stat.exists
+  tags: vim
+
+- name: Check if .vim/autoload exists
+  stat:
+    path: "{{ ansible_env_home }}/.vim/autoload"
+  register: vim_autoload
+  tags: vim
+
+- name: Create .vim/autoload if it does not exist
+  ansible.builtin.file:
+    path: "{{ ansible_env_home }}/.vim/autoload"
+    state: directory
+    mode: '744'
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+  when: not vim_autoload.stat.exists
+
+- name: Check if .vim/plugged exists
+  stat:
+    path: "{{ ansible_env_home }}/.vim/plugged"
+  register: vim_plugged
+  tags: vim
+
+- name: Create .vim/plugged if it does not exist
+  ansible.builtin.file:
+    path: "{{ ansible_env_home }}/.vim/plugged"
+    state: directory
+    recurse: yes
+    mode: '744'
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+  when: not vim_plugged.stat.exists
+
+- name: Cloning  https://github.com/google/vim-searchindex.git
+  ansible.builtin.git :
+    repo: https://github.com/google/vim-searchindex.git
+    dest: "{{ ansible_env_home }}/.vim/bundle/vim-searchindex"
+    force: yes
+  tags: vim
+
+- name: Cloning  https://github.com/vim-airline/vim-airline
+  ansible.builtin.git :
+    repo: https://github.com/vim-airline/vim-airline
+    dest: "{{ ansible_env_home }}/.vim/bundle/vim-airline"
+    force: yes
+  tags: vim
+
+- name: Cloning  https://github.com/Valloric/YouCompleteMe
+  ansible.builtin.git :
+    repo: https://github.com/Valloric/YouCompleteMe
+    dest: "{{ ansible_env_home }}/.vim/bundle/YouCompleteMe"
+    force: yes
+  tags: vim
+
+
+- name: Download plug.vim
+  get_url:
+    url: https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    dest: "{{ ansible_env_home }}/.vim/autoload/plug.vim"
+    mode: '744'
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+
+# You can also use the 'cmd' parameter instead of free form format.
+- name: build YouCompleteMe plugin
+  command: python3 ./install.py
+  args:
+    chdir: "{{ ansible_env_home }}/.vim/bundle/YouCompleteMe/"
+  become: yes
+  become_user: "{{ ansible_ssh_user }}"
+
+- name: write .vimrc for users
+  template:
+    src: .vimrc.j2
+    dest: '{{ ansible_env_home }}/.vimrc'
+    backup: yes
+    mode: '744'
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+  tags: vim
+
+- name: Install vim plugin
+  command: vim +PlugInstall +qa
+  args:
+    chdir: "{{ ansible_env_home }}/"
+  become: yes
+  become_user: "{{ ansible_ssh_user }}"

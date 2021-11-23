@@ -1,0 +1,16 @@
+---
+- name: Install dependencies for vim
+  apt:
+    name: 
+    - jq
+    - curl
+    - vim
+    - net-tools
+    - build-essential 
+    - cmake 
+    - vim-nox 
+    - python3-dev
+    - tmux
+    state: present
+    update_cache: yes
+  become: yes
