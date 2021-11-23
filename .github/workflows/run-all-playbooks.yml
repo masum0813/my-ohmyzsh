@@ -1,4 +1,4 @@
-name: Ansible Lint  # feel free to pick your own name
+name: Ansible Build  # feel free to pick your own name
 
 on: [push, pull_request]
 
@@ -13,7 +13,7 @@ jobs:
     - name: Checkout repo
       uses: actions/checkout@v2
 
-    - name: Lint Ansible Playbook
+    - name: Build Ansible Playbook
       # replace "master" with any valid ref
       uses: ansible-playbook --connection=ssh --timeout=30 ../playbooks/provision-all.yml
       with:
