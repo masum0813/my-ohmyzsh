@@ -35,7 +35,7 @@ jobs:
         uses: kentahikaru/github-action-vagrant--vagrantfile-from-repository@v1
         with:
           # the commands to run in vm
-          run: vagrant up --provision-with all
+          run: vagrant init && vagrant up --provision-with all
       # Runs a single command using the runners shell
       # - name: Run a one-line script
       #   run: sh ./provision/install-all.sh
