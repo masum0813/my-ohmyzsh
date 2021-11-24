@@ -25,6 +25,10 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
+      - name: Copy files to /vagrant folder
+        run: |
+          mkdir /vagrant && cp ./* /vagrant      
+
       - name: Install python & ansible
         run: |      
           sudo apt-get update -y && sudo apt-get install -y python3.8-venv python3-pip jq unzip
