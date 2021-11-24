@@ -38,21 +38,28 @@ jobs:
         run: |      
           sudo apt-get update -y && sudo apt-get install -y virtualbox vagrant
           pip3 -q install ansible==2.10.7
+      
+      - name: Install virtualbox & vagrant
+        run: |      
+          sh /vagrant/provision/install-all.sh
+          
+      
 
-      - name: Cache Vagrant boxes
-        uses: actions/cache@v2
-        with:
-          path: ~/.vagrant.d/boxes
-          key: ${{ runner.os }}-vagrant-${{ hashFiles('Vagrantfile') }}
-          restore-keys: |
-            ${{ runner.os }}-vagrant-
 
-      - name: Show Vagrant version
-        run: vagrant --version
+      # - name: Cache Vagrant boxes
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: ~/.vagrant.d/boxes
+      #     key: ${{ runner.os }}-vagrant-${{ hashFiles('Vagrantfile') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-vagrant-
 
-      - name: Run vagrant up
-        run: vagrant up
+      # - name: Show Vagrant version
+      #   run: vagrant --version
 
-      - name: ssh into box after boot
-        run: vagrant ssh -c "echo 'hello world!'"
+      # - name: Run vagrant up
+      #   run: vagrant up
+
+      # - name: ssh into box after boot
+      #   run: vagrant ssh -c "echo 'hello world!'"
 
