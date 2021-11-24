@@ -1,7 +1,7 @@
 #!/bin/bash -e
 export VagrantWD=/vagrant
 
-source ${VagrantWD}/provision/common-setup.sh
+. ${VagrantWD}/provision/common-setup.sh
 
 ansible-playbook \
 --connection=ssh \
