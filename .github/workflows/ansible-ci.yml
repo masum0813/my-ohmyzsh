@@ -27,7 +27,7 @@ jobs:
 
       - name: Copy files to /vagrant folder
         run: |
-          mkdir /vagrant && cp ./* /vagrant      
+          sudo mkdir /vagrant && sudo cp ./* /vagrant      
 
       - name: Install python & ansible
         run: |      

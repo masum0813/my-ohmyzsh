@@ -1,6 +1,8 @@
 
 # My Oh my-zsh :)
 
+[![Build Vagrant CI](https://github.com/masum0813/my-ohmyzsh/actions/workflows/ansible-ci.yml/badge.svg)](https://github.com/masum0813/my-ohmyzsh/actions/workflows/ansible-ci.yml)
+
 ```bash
 vagrant up
 ```
