@@ -17,11 +17,6 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-vagrant-
 
-    - name: Install virtualbox & vagrant
-      run: |      
-        sudo apt-get update -y && sudo apt-get install -y virtualbox vagrant
-        pip3 -q install ansible==2.10.7
-
     - name: Show Vagrant version
       run: vagrant --version
 
