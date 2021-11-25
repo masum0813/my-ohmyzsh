@@ -8,8 +8,10 @@ CTRL_00_IP      = "172.16.9.100"
 TERRAFORM_VERSION = "1.0.10"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-    config.vm.box = "geerlingguy/ubuntu2004"
-    config.vm.box_version = "1.0.3"
+    # config.vm.box = "geerlingguy/ubuntu2004"
+    # config.vm.box_version = "1.0.3"
+    config.vm.box = "ramsey/macos-catalina"
+    config.vm.box_version = "1.0.0"
     config.vm.provider "virtualbox"
   
     # disable the default synced_folder and sync the root folder
