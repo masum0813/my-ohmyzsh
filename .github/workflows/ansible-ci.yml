@@ -38,10 +38,10 @@ jobs:
       #   run: |      
       #     sh /vagrant/provision/install-all.sh
 
-      # - name: Install virtualbox & vagrant
-      #   run: |      
-      #     sudo apt-get update -y && sudo apt-get install -y virtualbox vagrant
-      #     pip3 -q install ansible==2.10.7
+      - name: Install virtualbox & vagrant
+        run: |      
+          sudo apt-get update -y && sudo apt-get install -y virtualbox vagrant
+          pip3 -q install ansible==2.10.7
       
 
       - name: Cache Vagrant boxes
