@@ -29,15 +29,6 @@ jobs:
       #   run: |
       #     sudo mkdir /vagrant && sudo cp -rf ./* /vagrant      
 
-      # - name: Install python & ansible
-      #   run: |      
-      #     sudo apt-get update -y && sudo apt-get install -y python3.8-venv python3-pip jq unzip
-      #     pip3 -q install ansible==2.10.7
-
-      # - name: Run Ansible file
-      #   run: |      
-      #     sh /vagrant/provision/install-all.sh
-
       - name: Cache Vagrant boxes
         uses: actions/cache@v2
         with:
@@ -45,6 +36,9 @@ jobs:
           key: ${{ runner.os }}-vagrant-${{ hashFiles('Vagrantfile') }}
           restore-keys: |
             ${{ runner.os }}-vagrant-
+
+      - name: Vagrant add box geerlingguy/ubuntu2004
+        run: vagrant box add geerlingguy/ubuntu2004 
 
       - name: Show Vagrant version
         run: vagrant --version
