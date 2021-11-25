@@ -25,37 +25,35 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      - name: Copy files to /vagrant folder
-        run: |
-          sudo mkdir /vagrant && sudo cp -rf ./* /vagrant      
+      # - name: Copy files to /vagrant folder
+      #   run: |
+      #     sudo mkdir /vagrant && sudo cp -rf ./* /vagrant      
 
-      - name: Install python & ansible
-        run: |      
-          sudo apt-get update -y && sudo apt-get install -y python3.8-venv python3-pip jq unzip
-          pip3 -q install ansible==2.10.7
+      # - name: Install python & ansible
+      #   run: |      
+      #     sudo apt-get update -y && sudo apt-get install -y python3.8-venv python3-pip jq unzip
+      #     pip3 -q install ansible==2.10.7
+
+      # - name: Run Ansible file
+      #   run: |      
+      #     sh /vagrant/provision/install-all.sh
 
       # - name: Install virtualbox & vagrant
       #   run: |      
       #     sudo apt-get update -y && sudo apt-get install -y virtualbox vagrant
       #     pip3 -q install ansible==2.10.7
       
-      - name: Run Ansible file
-        run: |      
-          sh /vagrant/provision/install-all.sh
 
-      
+      - name: Cache Vagrant boxes
+        uses: actions/cache@v2
+        with:
+          path: ~/.vagrant.d/boxes
+          key: ${{ runner.os }}-vagrant-${{ hashFiles('Vagrantfile') }}
+          restore-keys: |
+            ${{ runner.os }}-vagrant-
 
-
-      # - name: Cache Vagrant boxes
-      #   uses: actions/cache@v2
-      #   with:
-      #     path: ~/.vagrant.d/boxes
-      #     key: ${{ runner.os }}-vagrant-${{ hashFiles('Vagrantfile') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-vagrant-
-
-      # - name: Show Vagrant version
-      #   run: vagrant --version
+      - name: Show Vagrant version
+        run: vagrant --version
 
       # - name: Run vagrant up
       #   run: vagrant up
