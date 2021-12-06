@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Build Ansible CI
+name: Build Vagrant CI
 
 # Controls when the workflow will run
 on:
@@ -25,10 +25,6 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # - name: Copy files to /vagrant folder
-      #   run: |
-      #     sudo mkdir /vagrant && sudo cp -rf ./* /vagrant      
-
       - name: Cache Vagrant boxes
         uses: actions/cache@v2
         with:
@@ -41,8 +37,13 @@ jobs:
         run: vagrant --version
 
       - name: Run vagrant up
-        run: vagrant up
+        run: vagrant up --provision-with all
 
-      # - name: ssh into box after boot
-      #   run: vagrant ssh -c "echo 'hello world!'"
+      - name: ssh into box after boot
+        run: vagrant ssh -c "hostname && zsh --version && ansible --version"
 
+      - name: Run vagrant destroy
+        run: vagrant destroy
+
+
+ 

@@ -10,3 +10,5 @@
 *.py text eol=lf
 *_id_rsa text eol=lf
 *_id_rsa.pub text eol=lf
+
+
