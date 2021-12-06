@@ -1,8 +1,6 @@
 ---
 - hosts: myzsh
-  become: yes
   gather_facts: no
 
-
   roles:
-    - oh-myzsh
+    - devops-tools

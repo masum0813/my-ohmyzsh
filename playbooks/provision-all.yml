@@ -1,11 +1,10 @@
 ---
-- hosts: myzsh
+- hosts: all
   become: yes
   gather_facts: no
 
-  vars_files:
-    - /vagrant/vars/main.yml
-
   roles:
+    - packages
     - oh-myzsh
+    - devops-tools
     - other-tools
