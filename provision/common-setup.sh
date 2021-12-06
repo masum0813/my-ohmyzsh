@@ -1,4 +1,6 @@
 #!/bin/bash -e
+export VagrantWD=/vagrant
+
 TEMP_DIR=$(mktemp -d)
 
 export INVENTORY_FOLDER=${TEMP_DIR}/inventory
