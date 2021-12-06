@@ -1,0 +1,18 @@
+---
+- name: Install dependencies
+  package:
+    name:
+      - git
+      - zsh
+      - fonts-powerline
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - net-tools
+      - build-essential 
+      - cmake 
+      - jq
+      - python3-dev
+    state: present
+    update_cache: yes
+  tags: package

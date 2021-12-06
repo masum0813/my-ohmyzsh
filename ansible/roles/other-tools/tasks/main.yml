@@ -1,4 +1,3 @@
 ---
-- include: others.yml
 - include: tmux.yml
 - include: vim.yml

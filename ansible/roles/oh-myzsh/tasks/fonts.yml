@@ -1,0 +1,81 @@
+---
+#https://gist.github.com/cecepm/64fccd609adc0c96fb2292c0e1c74451
+- name: Check if .fonts exists
+  stat:
+    path: "{{ ansible_env_home }}/.local/share/fonts"
+  register: fontsfolder
+  tags: fonts
+
+- name: Create .local/share/fonts if it does not exist
+  ansible.builtin.file:
+    path: "{{ ansible_env_home }}/.local/share/fonts"
+    state: directory
+    recurse: yes
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+  when: not fontsfolder.stat.exists
+  tags: fonts
+
+- name: Check if Meslo Regular exists
+  stat:
+    path: "{{ ansible_env_home }}/.local/share/fonts/MesloLGS NF Regular.ttf"
+  register: mesloregular
+  tags: fonts
+
+- name: Download Meslo Regular fonts
+  get_url:
+    url: https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf
+    dest: "{{ ansible_env_home }}/.local/share/fonts/MesloLGS NF Regular.ttf"
+    mode: '700'
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+  when: not mesloregular.stat.exists
+  tags: fonts
+
+- name: Check if Meslo Bold exists
+  stat:
+    path: "{{ ansible_env_home }}/.local/share/fonts/MesloLGS NF Regular.ttf"
+  register: meslobold
+  tags: fonts
+
+- name: Download Meslo Bold fonts
+  get_url:
+    url: https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf
+    dest: "{{ ansible_env_home }}/.local/share/fonts/MesloLGS NF Bold.ttf"
+    mode: '700'
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+  when: not meslobold.stat.exists
+  tags: fonts
+
+- name: Check if Meslo Italic exists
+  stat:
+    path: "{{ ansible_env_home }}/.local/share/fonts/MesloLGS NF Italic.ttf"
+  register: mesloitalic
+  tags: fonts
+
+- name: Download Meslo Italic" fonts
+  get_url:
+    url: https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf
+    dest: "{{ ansible_env_home }}/.local/share/fonts/MesloLGS NF Italic.ttf"
+    mode: '700'
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+  when: not mesloitalic.stat.exists
+  tags: fonts
+
+- name: Check if Meslo Italic exists
+  stat:
+    path: "{{ ansible_env_home }}/.local/share/fonts/MesloLGS NF Bold Italic.ttf"
+  register: meslobolditalic
+  tags: fonts
+
+- name: Download Meslo Bold Italic fonts
+  get_url:
+    url: https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf
+    dest: "{{ ansible_env_home }}/.local/share/fonts/MesloLGS NF Bold Italic.ttf"
+    mode: '700'
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+  when: not meslobolditalic.stat.exists
+  tags: fonts

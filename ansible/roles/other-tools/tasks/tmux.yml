@@ -1,4 +1,12 @@
 ---
+- name: Install tmux
+  apt:
+    name: 
+    - tmux
+    state: present
+    update_cache: yes
+  become: yes
+  
 - name: Check if tmux-plugins/tpm exists
   stat:
     path: "{{ ansible_env_home }}/.tmux/plugins/tpm"
@@ -9,8 +17,14 @@
   ansible.builtin.git :
     repo: https://github.com/tmux-plugins/tpm
     dest: "{{ ansible_env_home }}/.tmux/plugins/tpm"
-    force: yes
+    update: no
   when: not tmux_plugins_tpm.stat.exists
+  tags: tmux
+
+- name: Check .tmux.conf for users
+  stat:
+    path: "{{ ansible_env_home }}/.tmux.conf"
+  register: stat_tmux_conf
   tags: tmux
 
 - name: write .tmux.conf for users
@@ -21,6 +35,13 @@
     mode: '744'
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
+  when: not stat_tmux_conf.stat.exists
+  tags: tmux
+
+- name: Check .tmux folder for users
+  stat:
+    path: "{{ ansible_env_home }}/.tmux"
+  register: stat_tmux_folder
   tags: tmux
 
 - name: recursively update .tmux folder
@@ -30,5 +51,6 @@
     recurse: yes
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
+  when: not stat_tmux_folder.stat.exists
   tags: tmux
 

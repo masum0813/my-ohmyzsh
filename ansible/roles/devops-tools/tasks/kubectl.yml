@@ -1,0 +1,38 @@
+---
+- name: Add an Apt signing key for kubectl
+  ansible.builtin.apt_key:
+    url: https://baltocdn.com/helm/signing.asc
+    state: present
+  tags: kubectl
+
+- name: Check if kubernetes-archive-keyring.gpg exists
+  stat:
+    path: /usr/share/keyrings/kubernetes-archive-keyring.gpg
+  register: kubernetes_archive_keyring
+  tags: kubectl
+
+- name: Download the Google Cloud public signing key
+  get_url:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    dest: /usr/share/keyrings/kubernetes-archive-keyring.gpg
+    mode: '744'
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+  when: not kubernetes_archive_keyring.stat.exists
+  tags: kubectl
+
+
+- name: Add the Kubernetes apt repository
+  ansible.builtin.apt_repository:
+    repo: deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main
+    state: present
+    filename: helm
+  tags: kubectl
+
+- name: Update apt package index with the new repository and install kubectl
+  package:
+    name:
+      - kubectl
+    state: present
+    update_cache: true
+  tags: kubectl
